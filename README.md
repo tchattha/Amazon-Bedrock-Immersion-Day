@@ -72,6 +72,8 @@ This workshop is presented as a series of **Python notebooks**, which you can ru
 ![Setup](./images/setup/04.png)
 ![Kernel](./images/setup/05.png)
 ![Start](./images/setup/06.png)
+>Note: *You might have to change the configuration in the notebooks to meet special requirements for your setting.*
+![Role](./images/setup/10.png) 
 3. Repeat the step above for all the notebooks in the directory
 4. Create a system terminal from the Launcher
 ![Terminal](./images/setup/07.png)
