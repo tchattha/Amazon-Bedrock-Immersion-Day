@@ -4,3 +4,4 @@ botocore>=1.31.57
 langchain==0.0.309
 faiss-cpu>=1.7,<2
 streamlit==1.27.0
+sqlalchemy==2.0.23
