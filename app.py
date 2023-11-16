@@ -1,3 +1,6 @@
+import boto3
+import os
+import sys
 import uuid
 import json
 import streamlit as st
@@ -9,14 +12,30 @@ from langchain.schema import HumanMessage, AIMessage
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain.memory.chat_message_histories import DynamoDBChatMessageHistory
-import boto3
+
+module_path = ".."
+sys.path.append(os.path.abspath(module_path))
+from utils import bedrock
+
+
+# ---- ⚠️ Un-comment and edit the below lines as needed for your AWS setup ⚠️ ----
+
+# os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+# os.environ["AWS_PROFILE"] = "<YOUR_PROFILE>"
+# os.environ["BEDROCK_ASSUME_ROLE"] = "<YOUR_ROLE_ARN>"  # E.g. "arn:aws:..."
+
+
+boto3_bedrock = bedrock.get_bedrock_client(
+    assumed_role=os.environ.get("BEDROCK_ASSUME_ROLE", None),
+    region=os.environ.get("AWS_DEFAULT_REGION", None)
+)
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('ChatSessionTable')
 
-llm = Bedrock(model_id='anthropic.claude-instant-v1')
-chat_model = BedrockChat(model_id="anthropic.claude-instant-v1", model_kwargs={"temperature":0.1})
-embeddings = BedrockEmbeddings(model_id='amazon.titan-embed-text-v1')
+llm = Bedrock(model_id='anthropic.claude-instant-v1',client=boto3_bedrock)
+chat_model = BedrockChat(model_id="anthropic.claude-instant-v1", client=boto3_bedrock, model_kwargs={"temperature":0.1})
+embeddings = BedrockEmbeddings(model_id='amazon.titan-embed-text-v1', client=boto3_bedrock,)
 vector_store = FAISS.load_local('./vector_db', embeddings)
 response = None
 
